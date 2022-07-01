@@ -45,12 +45,12 @@ cudaError_t checkCuda(cudaError_t result)
 void profileCopies(float        *h_a, 
                    float        *h_b, 
                    float        *d, 
-                   unsigned int  n,
+                   unsigned long long  n,
                    char         *desc)
 {
   printf("\n%s transfers\n", desc);
 
-  unsigned int bytes = n * sizeof(float);
+  unsigned long long bytes = n * sizeof(float);
 
   // events for timing
   cudaEvent_t startEvent, stopEvent; 
@@ -89,8 +89,8 @@ void profileCopies(float        *h_a,
 
 int main()
 {
-  unsigned int nElements = 4*1024*1024;
-  const unsigned int bytes = nElements * sizeof(float);
+  unsigned long long nElements = 512*1024*1024;
+  const unsigned long long bytes = nElements * sizeof(float);
 
   // host arrays
   float *h_aPageable, *h_bPageable;   
@@ -116,7 +116,7 @@ int main()
   checkCuda( cudaGetDeviceProperties(&prop, 0) );
 
   printf("\nDevice: %s\n", prop.name);
-  printf("Transfer size (MB): %d\n", bytes / (1024 * 1024));
+  printf("Transfer size (MB): %lld\n", bytes / (1024 * 1024));
 
   // perform copies and report bandwidth
   profileCopies(h_aPageable, h_bPageable, d_a, nElements, "Pageable");
